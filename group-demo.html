@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="description" content="A live demo of a GiftPage Wala Group Gift Page — one birthday page, made by the whole gang. Envelope, gang letter, a card from every friend, polaroids and a candle-wish finale." />
+    <link rel="icon" href="data:," />
+    <title>For Priya — A Group Gift · GiftPage Wala Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,650;0,9..144,800;1,9..144,550;1,9..144,650&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #faf1e1;
+        --bg-soft: #f4e7cf;
+        --surface: #fffaf0;
+        --surface-2: #fdf3df;
+        --ink: #33231a;
+        --ink-soft: #5d4636;
+        --muted: #8a6f5c;
+        --line: #e8d5b8;
+        --rose: #b5443c;
+        --rose-deep: #93352f;
+        --rose-soft: #f6ddd3;
+        --gold: #c08a1e;
+        --gold-bright: #e0aa3e;
+        --gold-soft: #f3e3ba;
+        --shadow: 0 18px 44px -18px rgba(94, 52, 18, .35);
+        --shadow-sm: 0 10px 26px -14px rgba(94, 52, 18, .35);
+        --radius: 20px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1c110a;
+          --bg-soft: #241610;
+          --surface: #2a1a10;
+          --surface-2: #33200f;
+          --ink: #f6e9d5;
+          --ink-soft: #e3cdb2;
+          --muted: #b99c80;
+          --line: #4a3120;
+          --rose: #e07856;
+          --rose-deep: #e88a6c;
+          --rose-soft: #47241c;
+          --gold: #e3b34c;
+          --gold-bright: #f0c568;
+          --gold-soft: #453311;
+          --shadow: 0 18px 44px -18px rgba(0, 0, 0, .7);
+          --shadow-sm: 0 10px 26px -14px rgba(0, 0, 0, .65);
+        }
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 17px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+      h1, h2, h3, .serif { font-family: "Fraunces", Georgia, serif; }
+      ::selection { background: var(--gold-soft); }
+      .wrap { max-width: 680px; margin: 0 auto; padding: 0 20px; }
+
+      .btn {
+        display: inline-flex; align-items: center; gap: 9px;
+        background: var(--rose); color: #fff7ea; text-decoration: none;
+        font-weight: 700; font-size: 1rem; line-height: 1;
+        padding: 14px 24px; border-radius: 999px; border: 0; cursor: pointer;
+        box-shadow: 0 12px 26px -12px rgba(147, 53, 47, .65);
+        transition: transform .15s ease, background .15s ease;
+      }
+      .btn:hover { background: var(--rose-deep); transform: translateY(-1px); }
+      .btn.ghost {
+        background: transparent; color: var(--ink);
+        border: 1.5px solid var(--line); box-shadow: none;
+      }
+      .btn.ghost:hover { border-color: var(--gold); background: var(--surface); }
+
+      /* ---------- sealed stage ---------- */
+      .stage {
+        min-height: 100svh;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        text-align: center; padding: 48px 20px 40px; position: relative;
+      }
+      .demo-tag {
+        position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+        font-size: .68rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase;
+        color: var(--gold); background: var(--gold-soft);
+        padding: 6px 14px; border-radius: 999px; white-space: nowrap;
+      }
+      .gift-for-kicker { font-size: .78rem; font-weight: 700; letter-spacing: .24em; text-transform: uppercase; color: var(--muted); margin: 0 0 6px; }
+      .gift-for { font-family: "Fraunces", Georgia, serif; font-weight: 800; font-size: clamp(2.6rem, 11vw, 4.2rem); line-height: 1.02; margin: 0; }
+      .gift-from { color: var(--ink-soft); font-size: 1.08rem; margin: 10px 0 0; }
+      .gift-from b { color: var(--rose); }
+
+      .env-stage { position: relative; width: 272px; height: 238px; margin-top: 38px; flex: none; }
+      .env-back { position: absolute; left: 0; right: 0; bottom: 0; height: 162px; background: #a03d36; border-radius: 12px; z-index: 0; }
+      .env-letter {
+        position: absolute; left: 14px; right: 14px; bottom: 10px; height: 168px;
+        background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+        padding: 16px 16px; text-align: left; z-index: 1;
+        transition: transform .9s cubic-bezier(.22,.9,.3,1) .25s;
+        box-shadow: var(--shadow-sm);
+      }
+      .env-letter p { margin: 0; font-family: "Fraunces", Georgia, serif; font-size: .86rem; line-height: 1.45; color: var(--ink-soft); }
+      .env-letter .sign { margin-top: 8px; color: var(--rose); font-style: italic; }
+      .env-front {
+        position: absolute; left: 0; right: 0; bottom: 0; height: 162px; z-index: 2;
+        background: linear-gradient(160deg, #c0503f, #a03d36 60%, #8c332c);
+        clip-path: polygon(0 0, 50% 58%, 100% 0, 100% 100%, 0 100%);
+        border-radius: 12px;
+      }
+      .env-flap {
+        position: absolute; left: 0; right: 0; bottom: 76px; height: 88px; z-index: 3;
+        background: linear-gradient(180deg, #b8493e, #a03d36);
+        clip-path: polygon(0 0, 100% 0, 50% 100%);
+        transform-origin: top center;
+        transition: transform .7s cubic-bezier(.22,.9,.3,1);
+        border-radius: 12px 12px 0 0;
+      }
+      .seal {
+        position: absolute; left: 50%; bottom: 62px; transform: translateX(-50%);
+        width: 62px; height: 62px; border-radius: 50%; z-index: 4;
+        background: radial-gradient(circle at 32% 30%, var(--gold-bright), var(--gold) 70%);
+        border: 2px solid color-mix(in srgb, var(--gold) 60%, #7a5510);
+        color: #fff8e6; display: grid; place-items: center; cursor: pointer;
+        box-shadow: 0 10px 22px -8px rgba(122, 85, 16, .7);
+        transition: transform .25s ease, opacity .3s ease;
+      }
+      .seal:hover { transform: translateX(-50%) scale(1.07); }
+      .env-stage.open .env-flap { transform: rotateX(178deg); z-index: 0; }
+      .env-stage.open .seal { opacity: 0; transform: translateX(-50%) scale(.4); pointer-events: none; }
+      .env-stage.open .env-letter { transform: translateY(-46px); }
+      .tap-hint { margin-top: 26px; color: var(--muted); font-weight: 600; font-size: .95rem; animation: nudge 2.2s ease-in-out infinite; }
+      @keyframes nudge { 0%, 100% { transform: translateY(0); opacity: .85; } 50% { transform: translateY(-4px); opacity: 1; } }
+      .scroll-hint { display: none; margin-top: 26px; color: var(--rose); font-weight: 700; font-size: .95rem; text-decoration: none; }
+      .stage.opened .tap-hint { display: none; }
+      .stage.opened .scroll-hint { display: inline-block; }
+      #confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 60; }
+
+      /* ---------- content sections ---------- */
+      .content { opacity: 0; transform: translateY(14px); transition: opacity .7s ease, transform .7s ease; pointer-events: none; }
+      .content.show { opacity: 1; transform: none; pointer-events: auto; }
+      section.block { padding: 54px 0 8px; }
+      .kicker { font-size: .74rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin: 0 0 8px; text-align: center; }
+      .sec-title { font-size: clamp(1.7rem, 6.4vw, 2.3rem); font-weight: 800; line-height: 1.12; margin: 0 0 10px; text-align: center; }
+      .sec-title em { font-style: italic; color: var(--rose); }
+      .sec-sub { text-align: center; color: var(--muted); margin: 0 auto 26px; max-width: 30rem; }
+
+      .count-chip {
+        display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 4px 0 6px;
+      }
+      .count-chip .cell {
+        background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+        min-width: 70px; padding: 10px 8px 8px; text-align: center; box-shadow: var(--shadow-sm);
+      }
+      .count-chip .cell b { display: block; font-family: "Fraunces", Georgia, serif; font-size: 1.5rem; line-height: 1; color: var(--rose); }
+      .count-chip .cell span { font-size: .66rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+      .letter-card {
+        background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+        padding: 30px 28px; box-shadow: var(--shadow); position: relative;
+      }
+      .letter-card::before {
+        content: ""; position: absolute; top: 0; left: 28px; right: 28px; height: 3px;
+        background: linear-gradient(90deg, var(--gold-bright), var(--rose)); border-radius: 0 0 4px 4px;
+      }
+      .letter-card p { font-family: "Fraunces", Georgia, serif; font-size: 1.06rem; line-height: 1.65; color: var(--ink-soft); margin: 0 0 14px; }
+      .letter-card p:last-child { margin-bottom: 0; }
+      .letter-card .sign { color: var(--rose); font-style: italic; }
+
+      /* ---------- gang flip cards ---------- */
+      .gang-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      @media (max-width: 420px) { .gang-grid { grid-template-columns: 1fr 1fr; gap: 10px; } }
+      .flip { perspective: 900px; height: 218px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+      .flip-in { position: relative; width: 100%; height: 100%; transition: transform .65s cubic-bezier(.3,.7,.3,1); transform-style: preserve-3d; }
+      .flip.flipped .flip-in { transform: rotateY(180deg); }
+      .face {
+        position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+        border-radius: 18px; padding: 18px 16px; display: flex; flex-direction: column;
+        border: 1px solid var(--line);
+      }
+      .face.front { background: var(--surface); box-shadow: var(--shadow-sm); align-items: flex-start; }
+      .face.back { background: var(--surface-2); transform: rotateY(180deg); box-shadow: var(--shadow-sm); }
+      .avatar {
+        width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center;
+        font-family: "Fraunces", Georgia, serif; font-weight: 800; font-size: 1.35rem; color: #fff8ec;
+        box-shadow: var(--shadow-sm); margin-bottom: 12px;
+      }
+      .face.front h3 { margin: 0; font-size: 1.18rem; line-height: 1.15; }
+      .face.front .role { color: var(--rose); font-weight: 700; font-size: .8rem; margin: 4px 0 0; }
+      .face.front .tap { margin-top: auto; color: var(--muted); font-size: .76rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+      .face.back p { margin: 0; font-size: .87rem; line-height: 1.5; color: var(--ink-soft); }
+      .face.back .memory { margin-top: auto; padding-top: 8px; border-top: 1px dashed var(--line); font-size: .78rem; color: var(--muted); }
+      .face.back .memory b { color: var(--gold); display: block; font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 2px; }
+
+      /* ---------- polaroids ---------- */
+      .pol-row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+      .pol {
+        background: #fffdf8; padding: 10px 10px 12px; width: 168px; border-radius: 6px;
+        box-shadow: var(--shadow); border: 1px solid #eee2cc;
+      }
+      .pol:nth-child(1) { transform: rotate(-2.4deg); }
+      .pol:nth-child(2) { transform: rotate(1.6deg) translateY(10px); }
+      .pol:nth-child(3) { transform: rotate(-1.2deg); }
+      .pol .scene { height: 128px; border-radius: 3px; position: relative; overflow: hidden; }
+      .pol figcaption { font-family: "Fraunces", Georgia, serif; font-style: italic; color: #5d4636; font-size: .84rem; text-align: center; padding-top: 9px; }
+      .scene .sun { position: absolute; width: 34px; height: 34px; border-radius: 50%; background: #ffe9a8; top: 14px; right: 16px; box-shadow: 0 0 24px 6px rgba(255, 233, 168, .65); }
+      .scene .hill { position: absolute; left: -10%; right: -10%; bottom: -38px; height: 84px; border-radius: 50%; }
+
+      /* ---------- candles ---------- */
+      .candles { display: flex; justify-content: center; gap: 34px; padding: 14px 0 4px; }
+      .candle { display: flex; flex-direction: column; align-items: center; gap: 0; background: none; border: 0; cursor: pointer; padding: 0; -webkit-tap-highlight-color: transparent; }
+      .flame {
+        width: 20px; height: 32px; border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%;
+        background: radial-gradient(circle at 50% 78%, #fff3b0 0 22%, #ffc93e 45%, #f08a1d 78%, #e05e10);
+        transform-origin: 50% 100%;
+        animation: flick 1.6s ease-in-out infinite;
+        transition: transform .35s ease, opacity .35s ease;
+        box-shadow: 0 0 22px 5px rgba(240, 160, 40, .45);
+        position: relative; z-index: 2;
+      }
+      @keyframes flick { 0%, 100% { transform: scale(1) rotate(-1.6deg); } 50% { transform: scale(1.07, .94) rotate(1.6deg); } }
+      .candle.out .flame { transform: scale(.1); opacity: 0; animation: none; box-shadow: none; }
+      .wick { width: 3px; height: 9px; background: #4a3120; border-radius: 2px; margin-top: -3px; z-index: 1; }
+      .stick { width: 34px; height: 86px; border-radius: 7px; margin-top: -1px; }
+      .candle:nth-child(1) .stick { background: repeating-linear-gradient(135deg, #c0503f 0 9px, #fff3df 9px 18px); }
+      .candle:nth-child(2) .stick { background: repeating-linear-gradient(135deg, #c08a1e 0 9px, #fff3df 9px 18px); }
+      .candle:nth-child(3) .stick { background: repeating-linear-gradient(135deg, #7a4a7e 0 9px, #fff3df 9px 18px); }
+      .candle-status { text-align: center; color: var(--muted); font-weight: 600; margin: 12px 0 0; }
+      .wish {
+        display: none; text-align: center; background: var(--surface); border: 1px solid var(--line);
+        border-radius: var(--radius); box-shadow: var(--shadow); padding: 26px 24px; margin-top: 22px;
+      }
+      .wish.show { display: block; }
+      .wish p { font-family: "Fraunces", Georgia, serif; font-size: 1.14rem; line-height: 1.55; color: var(--ink-soft); margin: 0; }
+      .wish p b { color: var(--rose); }
+
+      /* ---------- reaction + footer ---------- */
+      .react-box { text-align: center; padding: 8px 0 0; }
+      .toast {
+        display: none; margin: 16px auto 0; max-width: 26rem; background: var(--gold-soft); color: var(--ink);
+        border-radius: 14px; padding: 13px 17px; font-size: .92rem; font-weight: 600;
+      }
+      .toast.show { display: block; }
+      .demo-foot {
+        margin-top: 64px; border-top: 1px solid var(--line); background: var(--bg-soft);
+        padding: 34px 20px 44px; text-align: center;
+      }
+      .demo-foot .brand-line { font-family: "Fraunces", Georgia, serif; font-weight: 800; font-size: 1.15rem; margin: 0 0 6px; }
+      .demo-foot p { color: var(--muted); margin: 0 auto 18px; max-width: 30rem; font-size: .95rem; }
+      .demo-foot .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .flame, .tap-hint { animation: none; }
+        .flip-in, .env-letter, .env-flap, .content { transition: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- SEALED STAGE -->
+    <div class="stage" id="stage">
+      <span class="demo-tag">Live demo · Group Gift Page</span>
+      <p class="gift-for-kicker">A group gift for</p>
+      <h1 class="gift-for">Priya</h1>
+      <p class="gift-from">from <b>your whole gang</b> — all six of us ♥</p>
+
+      <div class="env-stage" id="envStage">
+        <div class="env-back" aria-hidden="true"></div>
+        <div class="env-letter" aria-hidden="true">
+          <p>Dear Priya,<br />One card was never going to survive this group. So we all showed up — open us one by one…</p>
+          <p class="sign">— the gang</p>
+        </div>
+        <div class="env-front" aria-hidden="true"></div>
+        <div class="env-flap" aria-hidden="true"></div>
+        <button class="seal" id="sealBtn" type="button" aria-label="Open the group gift envelope">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20.7C6.4 16.9 3 13.6 3 9.9 3 7.2 5 5 7.6 5c1.7 0 3.4.9 4.4 2.4C13 5.9 14.7 5 16.4 5 19 5 21 7.2 21 9.9c0 3.7-3.4 7-9 10.8Z"/></svg>
+        </button>
+      </div>
+      <p class="tap-hint" id="tapHint">Tap the gold seal to open your gift</p>
+      <a class="scroll-hint" href="#countdown">Your gang is waiting below ↓</a>
+    </div>
+
+    <canvas id="confetti" aria-hidden="true"></canvas>
+
+    <!-- CONTENT -->
+    <div class="content" id="content">
+      <main class="wrap">
+        <!-- COUNTDOWN -->
+        <section class="block" id="countdown">
+          <p class="kicker">The big day</p>
+          <h2 class="sec-title">Priya turns 23 <em>very soon</em></h2>
+          <p class="sec-sub">We couldn't wait in person, so we built you a page instead. The countdown is live:</p>
+          <div class="count-chip" role="timer" aria-label="Countdown to Priya's birthday">
+            <div class="cell"><b id="cd-d">0</b><span>days</span></div>
+            <div class="cell"><b id="cd-h">0</b><span>hours</span></div>
+            <div class="cell"><b id="cd-m">0</b><span>mins</span></div>
+            <div class="cell"><b id="cd-s">0</b><span>secs</span></div>
+          </div>
+        </section>
+
+        <!-- GANG LETTER -->
+        <section class="block">
+          <p class="kicker">First, a letter</p>
+          <h2 class="sec-title">From all of us, <em>properly</em></h2>
+          <div class="letter-card">
+            <p>Dear Priya,</p>
+            <p>Birthdays in this group are a team sport, and you are our favourite event. One card wasn't going to survive six people's handwriting, inside jokes and opinions — so we did what we do best: we all showed up, in one place, at the same time. (Rare, we know.)</p>
+            <p>Scroll down. Everyone left you something. Read them slowly — some of us got emotional, some of us are still pretending we didn't.</p>
+            <p class="sign">— Aarav, Sneha, Kabir, Meera, Rohan &amp; Ishita</p>
+          </div>
+        </section>
+
+        <!-- THE GANG -->
+        <section class="block">
+          <p class="kicker">Meet the gang</p>
+          <h2 class="sec-title">Six people. <em>Six cards.</em></h2>
+          <p class="sec-sub">Tap a card to flip it over. Yes, everyone actually wrote their own.</p>
+          <div class="gang-grid">
+            <div class="flip" tabindex="0" role="button" aria-label="Open Aarav's card">
+              <div class="flip-in">
+                <div class="face front">
+                  <div class="avatar" style="background:linear-gradient(140deg,#c0503f,#93352f)">A</div>
+                  <h3>Aarav</h3>
+                  <p class="role">The Partner-in-Crime</p>
+                  <p class="tap">Tap to open</p>
+                </div>
+                <div class="face back">
+                  <p>Another year of you stealing my fries, my hoodies and my playlist passwords. Keep the fries. The hoodie has a fan club now.</p>
+                  <p class="memory"><b>Core memory</b>Goa '24 — you danced on the table. There is video. There will always be video.</p>
+                </div>
+              </div>
+            </div>
+            <div class="flip" tabindex="0" role="button" aria-label="Open Sneha's card">
+              <div class="flip-in">
+                <div class="face front">
+                  <div class="avatar" style="background:linear-gradient(140deg,#c08a1e,#96690f)">S</div>
+                  <h3>Sneha</h3>
+                  <p class="role">The Secret-Keeper</p>
+                  <p class="tap">Tap to open</p>
+                </div>
+                <div class="face back">
+                  <p>You know everyone's secrets and have never leaked a single one — including the ones about yourself I had to drag out of you. Happy birthday, vault.</p>
+                  <p class="memory"><b>Core memory</b>3 AM call, your terrace, you solved my whole life before the chai got cold.</p>
+                </div>
+              </div>
+            </div>
+            <div class="flip" tabindex="0" role="button" aria-label="Open Kabir's card">
+              <div class="flip-in">
+                <div class="face front">
+                  <div class="avatar" style="background:linear-gradient(140deg,#3f6d5c,#2a4a3e)">K</div>
+                  <h3>Kabir</h3>
+                  <p class="role">The Photographer</p>
+                  <p class="tap">Tap to open</p>
+                </div>
+                <div class="face back">
+                  <p>I'm in none of the photos below because I took all of them. You're welcome. This year I demand one (1) picture with me in it.</p>
+                  <p class="memory"><b>Core memory</b>Every good photo of this group exists because I said "wait, the light is perfect."</p>
+                </div>
+              </div>
+            </div>
+            <div class="flip" tabindex="0" role="button" aria-label="Open Meera's card">
+              <div class="flip-in">
+                <div class="face front">
+                  <div class="avatar" style="background:linear-gradient(140deg,#7a4a7e,#553257)">M</div>
+                  <h3>Meera</h3>
+                  <p class="role">The Mum of the Group</p>
+                  <p class="tap">Tap to open</p>
+                </div>
+                <div class="face back">
+                  <p>Yes, I reminded everyone to write these cards. Yes, twice. Someone has to keep this family functioning. Eat on time this year, birthday girl.</p>
+                  <p class="memory"><b>Core memory</b>You, fever at 102°, still asking if *I* had eaten. That's who you are.</p>
+                </div>
+              </div>
+            </div>
+            <div class="flip" tabindex="0" role="button" aria-label="Open Rohan's card">
+              <div class="flip-in">
+                <div class="face front">
+                  <div class="avatar" style="background:linear-gradient(140deg,#2f5d8a,#1f4060)">R</div>
+                  <h3>Rohan</h3>
+                  <p class="role">The DJ</p>
+                  <p class="tap">Tap to open</p>
+                </div>
+                <div class="face back">
+                  <p>Every road trip, every house party, every bad day — there's been a song, and you've known all the words. This year, I'm learning yours.</p>
+                  <p class="memory"><b>Core memory</b>Marine Drive, windows down, you singing the wrong lyrics with full confidence.</p>
+                </div>
+              </div>
+            </div>
+            <div class="flip" tabindex="0" role="button" aria-label="Open Ishita's card">
+              <div class="flip-in">
+                <div class="face front">
+                  <div class="avatar" style="background:linear-gradient(140deg,#b5563c,#8a3b28)">I</div>
+                  <h3>Ishita</h3>
+                  <p class="role">The Planner</p>
+                  <p class="tap">Tap to open</p>
+                </div>
+                <div class="face back">
+                  <p>Full disclosure: I organised this page, the surprise dinner, and the backup surprise dinner. You deserve plans within plans. Happy birthday!</p>
+                  <p class="memory"><b>Core memory</b>Your 18th — three of us hid in one bathroom to surprise you. Worth it.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- POLAROIDS -->
+        <section class="block">
+          <p class="kicker">Evidence</p>
+          <h2 class="sec-title">The gang, <em>in the wild</em></h2>
+          <p class="sec-sub">In a real group page, these are your actual photos — polaroids, captions and all.</p>
+          <div class="pol-row">
+            <figure class="pol">
+              <div class="scene" style="background:linear-gradient(180deg,#f6c177 0%,#e07856 55%,#7a4a7e 100%)">
+                <span class="sun"></span><span class="hill" style="background:#553257"></span>
+              </div>
+              <figcaption>Marine Drive, last winter</figcaption>
+            </figure>
+            <figure class="pol">
+              <div class="scene" style="background:linear-gradient(180deg,#2f5d8a 0%,#3f6d5c 70%,#241610 100%)">
+                <span class="sun" style="background:#fdf3df; box-shadow:0 0 18px 4px rgba(253,243,223,.6)"></span><span class="hill" style="background:#1c110a"></span>
+              </div>
+              <figcaption>2 AM maggi, Ishita's terrace</figcaption>
+            </figure>
+            <figure class="pol">
+              <div class="scene" style="background:linear-gradient(180deg,#7ec8e3 0%,#f6c177 60%,#e07856 100%)">
+                <span class="sun"></span><span class="hill" style="background:#c0503f"></span>
+              </div>
+              <figcaption>Goa '24 — it finally happened</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <!-- CANDLES -->
+        <section class="block">
+          <p class="kicker">The finale</p>
+          <h2 class="sec-title">Make a wish, <em>Priya</em></h2>
+          <p class="sec-sub">Three candles, one from all of us. Tap each flame to blow it out.</p>
+          <div class="candles">
+            <button class="candle" type="button" aria-label="Blow out candle one"><span class="flame"></span><span class="wick"></span><span class="stick"></span></button>
+            <button class="candle" type="button" aria-label="Blow out candle two"><span class="flame"></span><span class="wick"></span><span class="stick"></span></button>
+            <button class="candle" type="button" aria-label="Blow out candle three"><span class="flame"></span><span class="wick"></span><span class="stick"></span></button>
+          </div>
+          <p class="candle-status" id="candleStatus">3 candles lit</p>
+          <div class="wish" id="wish">
+            <p>Wish locked in. <b>Happy birthday, Priya</b> — may this year give you everything you pretend not to want. The gang has spoken. ♥</p>
+          </div>
+        </section>
+
+        <!-- REACTION -->
+        <section class="block">
+          <div class="react-box">
+            <p class="kicker">One last thing</p>
+            <h2 class="sec-title">The gang is <em>waiting…</em></h2>
+            <p class="sec-sub">In a real GiftPage group page, this button sends your reaction straight to the organiser on WhatsApp.</p>
+            <button class="btn" id="reactBtn" type="button">Send the gang your reaction</button>
+            <p class="toast" id="reactToast">Demo mode: in a live page, this opens WhatsApp to the organiser — your smile lands in their chat in one tap.</p>
+          </div>
+        </section>
+      </main>
+
+      <!-- DEMO FOOTER -->
+      <footer class="demo-foot">
+        <p class="brand-line">This is a live demo — imagine your gang here.</p>
+        <p>The Group Gift Page by GiftPage Wala: one organiser, up to 10 friends, a card from everyone, made by hand in 24 hours. <b>₹299</b> — ₹150 to start, ₹149 only when you love it.</p>
+        <div class="cta-row">
+          <a class="btn" href="https://www.instagram.com/giftpagewala" target="_blank" rel="noopener">DM “GROUP” to order yours</a>
+          <a class="btn ghost" href="https://4-krishu.github.io/giftpagewala/">Back to GiftPage Wala</a>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+      // ---------- confetti ----------
+      const canvas = document.getElementById('confetti');
+      const ctx = canvas.getContext('2d');
+      let parts = [], rafId = null;
+      function sizeCanvas() { canvas.width = innerWidth; canvas.height = innerHeight; }
+      sizeCanvas(); addEventListener('resize', sizeCanvas);
+      const COLORS = ['#b5443c', '#e0aa3e', '#f6c177', '#7a4a7e', '#3f6d5c', '#fff3df'];
+      function burst(x, y, n) {
+        for (let i = 0; i < n; i++) {
+          const a = Math.random() * Math.PI * 2, v = 3 + Math.random() * 7;
+          parts.push({
+            x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 3,
+            w: 5 + Math.random() * 6, h: 3 + Math.random() * 5,
+            rot: Math.random() * Math.PI, vr: (Math.random() - .5) * .3,
+            color: COLORS[Math.floor(Math.random() * COLORS.length)],
+            life: 1
+          });
+        }
+        if (!rafId) tick();
+      }
+      function tick() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        parts = parts.filter(p => p.life > 0);
+        for (const p of parts) {
+          p.x += p.vx; p.y += p.vy; p.vy += .16; p.vx *= .99; p.rot += p.vr; p.life -= .008;
+          ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+          ctx.globalAlpha = Math.max(p.life, 0); ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); ctx.restore();
+        }
+        if (parts.length) { rafId = requestAnimationFrame(tick); }
+        else { rafId = null; ctx.clearRect(0, 0, canvas.width, canvas.height); }
+      }
+
+      // ---------- open the envelope ----------
+      const stage = document.getElementById('stage');
+      const envStage = document.getElementById('envStage');
+      const content = document.getElementById('content');
+      let opened = false;
+      document.getElementById('sealBtn').addEventListener('click', () => {
+        if (opened) return; opened = true;
+        envStage.classList.add('open');
+        stage.classList.add('opened');
+        const r = envStage.getBoundingClientRect();
+        burst(r.left + r.width / 2, r.top + r.height / 2, 130);
+        setTimeout(() => content.classList.add('show'), 650);
+      });
+
+      // ---------- countdown (demo date: 6 days from first visit) ----------
+      const target = Date.now() + 6 * 24 * 3600 * 1000 + 7 * 3600 * 1000 + 23 * 60 * 1000;
+      const el = id => document.getElementById(id);
+      function pad(n) { return String(n).padStart(2, '0'); }
+      function tickClock() {
+        let diff = Math.max(0, target - Date.now());
+        const d = Math.floor(diff / 86400000); diff -= d * 86400000;
+        const h = Math.floor(diff / 3600000); diff -= h * 3600000;
+        const m = Math.floor(diff / 60000); diff -= m * 60000;
+        const s = Math.floor(diff / 1000);
+        el('cd-d').textContent = d; el('cd-h').textContent = pad(h);
+        el('cd-m').textContent = pad(m); el('cd-s').textContent = pad(s);
+      }
+      tickClock(); setInterval(tickClock, 1000);
+
+      // ---------- flip cards ----------
+      document.querySelectorAll('.flip').forEach(card => {
+        const flipIt = () => card.classList.toggle('flipped');
+        card.addEventListener('click', flipIt);
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flipIt(); }
+        });
+      });
+
+      // ---------- candles ----------
+      const status = document.getElementById('candleStatus');
+      const wish = document.getElementById('wish');
+      let lit = 3;
+      document.querySelectorAll('.candle').forEach(c => {
+        c.addEventListener('click', () => {
+          if (c.classList.contains('out')) return;
+          c.classList.add('out'); lit--;
+          status.textContent = lit === 0 ? 'All out. Wish made.' : lit + (lit === 1 ? ' candle' : ' candles') + ' still lit';
+          if (lit === 0) {
+            wish.classList.add('show');
+            const r = c.getBoundingClientRect();
+            burst(r.left + r.width / 2, r.top, 70);
+          }
+        });
+      });
+
+      // ---------- reaction demo ----------
+      document.getElementById('reactBtn').addEventListener('click', () => {
+        document.getElementById('reactToast').classList.add('show');
+      });
+    </script>
+  </body>
+</html>

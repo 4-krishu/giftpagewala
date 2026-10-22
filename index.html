@@ -371,6 +371,35 @@
         .flame { animation: none; }
         .letter, .env-flap, .seal, .polaroid-mini, .btn { transition: none; }
       }
+    
+      /* ---------- group page ---------- */
+      .group-card {
+        display: grid; grid-template-columns: 1.25fr .75fr; gap: 34px;
+        background: var(--surface); border: 1px solid var(--line);
+        border-radius: calc(var(--radius) + 6px); box-shadow: var(--shadow);
+        padding: 38px; position: relative; overflow: hidden;
+      }
+      .group-card::before {
+        content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+        background: linear-gradient(90deg, var(--gold-bright), var(--rose));
+      }
+      @media (max-width: 860px) { .group-card { grid-template-columns: 1fr; padding: 28px 22px; } }
+      .group-main h2 { font-size: clamp(1.8rem, 4.6vw, 2.5rem); line-height: 1.1; font-weight: 800; margin: 0 0 12px; }
+      .group-main h2 em { font-style: italic; font-weight: 650; color: var(--rose); }
+      .group-lede { color: var(--ink-soft); margin: 0 0 18px; max-width: 34rem; }
+      .group-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+      .group-side { background: var(--surface-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; align-self: start; }
+      .group-side .plan { font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: .76rem; color: var(--gold); margin: 0; }
+      .group-side .price-split div { background: var(--surface); }
+      .gang-chips { display: flex; align-items: center; margin: 4px 0 8px; }
+      .gchip {
+        width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center;
+        color: #fff8ec; font-family: "Fraunces", Georgia, serif; font-weight: 800; font-size: .95rem;
+        border: 2px solid var(--surface); margin-left: -9px;
+      }
+      .gchip:first-child { margin-left: 0; }
+      .gang-cap { font-size: .88rem; color: var(--muted); margin: 0; }
+      .group-note { color: var(--muted); font-size: .92rem; margin: 12px 0 0; }
     </style>
   </head>
   <body>
@@ -385,6 +414,7 @@
         <nav class="topnav" aria-label="Page sections">
           <a class="navlink" href="#inside">What's inside</a>
           <a class="navlink" href="#occasions">Occasions</a>
+          <a class="navlink" href="#group">Group Page</a>
           <a class="navlink" href="#how">How it works</a>
           <a class="navlink" href="#price">Price</a>
           <a class="navlink" href="#faq">FAQ</a>
@@ -569,6 +599,47 @@
         </div>
       </section>
 
+      <!-- GROUP PAGE -->
+      <section id="group">
+        <div class="wrap">
+          <div class="group-card">
+            <div class="group-main">
+              <p class="kicker">New · The Group Page</p>
+              <h2>One friend organises.<br />The <em>whole gang</em> shows up.</h2>
+              <p class="group-lede">Birthdays are a group project — so why is the gift from just one person? On a Group Page, every friend gets their own flip-card: their photo, their words, their favourite memory of the birthday star. One link, opened like a present, with the whole gang inside it.</p>
+              <ul class="incl">
+                <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>Up to 10 friends — a personal card from everyone</li>
+                <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>One organiser sends us the bits — goodbye, group-chat chaos</li>
+                <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>The full experience: envelope, gang letter, polaroids, candle-wish finale</li>
+                <li><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>A reaction button that lands their smile straight in your WhatsApp</li>
+              </ul>
+              <div class="group-ctas">
+                <a class="btn" href="group-demo.html">Open the live group demo</a>
+                <a class="btn ghost" href="https://www.instagram.com/giftpagewala" target="_blank" rel="noopener">DM “GROUP” to order</a>
+              </div>
+            </div>
+            <div class="group-side">
+              <p class="plan">The Group Page</p>
+              <p class="price-amount">₹299 <small>total</small></p>
+              <div class="price-split">
+                <div><b>₹150</b><span>to start, via UPI</span></div>
+                <div><b>₹149</b><span>on delivery, when you love it</span></div>
+              </div>
+              <div class="gang-chips" aria-hidden="true">
+                <span class="gchip" style="background:linear-gradient(140deg,#c0503f,#93352f)">A</span>
+                <span class="gchip" style="background:linear-gradient(140deg,#c08a1e,#96690f)">S</span>
+                <span class="gchip" style="background:linear-gradient(140deg,#3f6d5c,#2a4a3e)">K</span>
+                <span class="gchip" style="background:linear-gradient(140deg,#7a4a7e,#553257)">M</span>
+                <span class="gchip" style="background:linear-gradient(140deg,#2f5d8a,#1f4060)">R</span>
+                <span class="gchip" style="background:linear-gradient(140deg,#b5563c,#8a3b28)">I</span>
+              </div>
+              <p class="gang-cap">Priya's gang, from the demo — tap through all six cards.</p>
+              <p class="group-note">Split it six ways and it's ₹50 a head. Cheaper than the cake, remembered a lot longer.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- HOW IT WORKS -->
       <section id="how">
         <div class="wrap">
@@ -674,6 +745,10 @@
               <div class="a"><p>One link, from you. They tap it and the gift opens in their phone browser — no app, no sign-up, no downloads. Send it on WhatsApp, DM, or hide it behind a QR code in a card if you're feeling fancy.</p></div>
             </details>
             <details class="faq">
+              <summary>What's the Group Page?</summary>
+              <div class="a"><p>Our newest page, made for birthdays with a whole gang behind them. One organiser collects a photo and a few lines from up to 10 friends; we build one page with a flip-card from everyone, plus the envelope opening, a gang letter, polaroids and the candle finale. It's ₹299 — ₹150 to start, ₹149 on delivery. There's a live demo on this page: open it and tap through Priya's gang.</p></div>
+            </details>
+            <details class="faq">
               <summary>Is it only for birthdays?</summary>
               <div class="a"><p>Birthdays are the favourite, but the same page works beautifully for anniversaries, proposals, Mother's Day, farewells, thank-yous and “just because”. Tell us the occasion in your DM and we'll tune the words and the finale to it.</p></div>
             </details>
@@ -692,7 +767,7 @@
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.15" fill="currentColor" stroke="none"/></svg>
               DM “GIFT” on Instagram
             </a>
-            <p class="handle">Find us at <a href="https://www.instagram.com/giftpagewala" target="_blank" rel="noopener">@giftpagewala</a> · Every page ₹199 flat · Ready in 24 hours</p>
+            <p class="handle">Find us at <a href="https://www.instagram.com/giftpagewala" target="_blank" rel="noopener">@giftpagewala</a> · Gift pages ₹199 · Group pages ₹299 · Ready in 24 hours</p>
           </div>
         </div>
       </div>
